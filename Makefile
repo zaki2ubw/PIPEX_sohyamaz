@@ -6,7 +6,7 @@
 #    By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 14:14:33 by sohyamaz          #+#    #+#              #
-#    Updated: 2025/06/17 14:17:14 by sohyamaz         ###   ########.fr        #
+#    Updated: 2025/06/17 14:22:18 by sohyamaz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,9 +26,9 @@ CC	= cc
 CFLAGS	= -Wall -Wextra -Werror -g -I$(LIBDIR) -Ignl
 
 #Declaration of rules
-all	: $(MLX_DIR) $(LIBNAME) $(NAME)
+all	: $(LIBNAME) $(NAME)
 
-$(NAME)	: $(OBJS) $(MLX_LIB)
+$(NAME)	: $(OBJS)
 	$(CC) $(OBJS) -L$(LIBDIR) -lft -o $(NAME)
 
 $(LIBNAME):
