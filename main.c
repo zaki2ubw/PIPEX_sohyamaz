@@ -26,9 +26,14 @@ typedef struct s_pipe
 	struct s_pipe	*prev;
 	struct s_pipe	*next;
 }	t_pipe;
+
 int	main(int argc, char **argv, char **envp)
 {
+	t_cmd	cmd;
+
+	init_cmd(&cmd);
 	format_check(argc);
+	init_pipe(cmd, argc);
 	//allocate pipe < argc - 3 times
 	//open fd for in/out
 	//fork process < argc - 3 times
