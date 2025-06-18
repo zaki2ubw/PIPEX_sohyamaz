@@ -12,6 +12,20 @@
 
 #include "pipex.h"
 
+typedef struct s_cmd
+{
+	char	*cmd;
+	int		fd[2];
+	struct s_cmd	*prev;
+	struct s_cmd	*next;
+}	t_cmd;
+
+typedef struct s_pipe
+{
+	int		fd[2];
+	struct s_pipe	*prev;
+	struct s_pipe	*next;
+}	t_pipe;
 int	main(int argc, char **argv, char **envp)
 {
 	format_check(argc);

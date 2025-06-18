@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-void	init_pipe(int *pipe, int argc)
+void	init_pipe(t_cmd *cmd, int argc)
 {
 	int	count;
+	int	pipefd[2];
 
 	count = 0;
 	while (count < argc - 4)
-	{
-		 
+
