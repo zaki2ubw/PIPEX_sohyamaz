@@ -6,46 +6,47 @@
 #    By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/17 14:14:33 by sohyamaz          #+#    #+#              #
-#    Updated: 2025/06/17 14:22:18 by sohyamaz         ###   ########.fr        #
+#    Updated: 2025/06/19 21:27:48 by sohyamaz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-#Target declaration
-NAME	= pipex
-SRCS	= srsc/main.c\
-		  gnl/get_next_line.c\
-		  gnl/get_next_line_utils.c
-OBJS	= $(SRCS:%.c=%.o)
+NAME = pipex
 
-#External Libs
-LIBDIR	= Libft
-LIBNAME = $(LIBDIR)/libft.a
+SRCDIR = srcs
+SRCS = $(SRCDIR)/main.c \
+       $(SRCDIR)/init.c \
+       $(SRCDIR)/childs.c \
+       $(SRCDIR)/check.c \
+       $(SRCDIR)/exit.c
 
-#Conpile
-CC	= cc
-CFLAGS	= -Wall -Wextra -Werror -g -I$(LIBDIR) -Ignl
+OBJS = $(SRCS:.c=.o)
 
-#Declaration of rules
-all	: $(LIBNAME) $(NAME)
+# Libft
+LIBFT_DIR = Libft
+LIBFT_A = $(LIBFT_DIR)/libft.a
 
-$(NAME)	: $(OBJS)
-	$(CC) $(OBJS) -L$(LIBDIR) -lft -o $(NAME)
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -I.
 
-$(LIBNAME):
-	$(MAKE) -C $(LIBDIR)
+all: $(LIBFT_A) $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -O0 -c $< -o $@
+$(LIBFT_A):
+	$(MAKE) -C $(LIBFT_DIR)
 
-clean	:
-	rm -rf $(OBJS)
-	$(MAKE) -C $(LIBDIR) clean
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) -o $(NAME)
 
-fclean	: clean
-	rm -rf $(NAME)
-	$(MAKE) -C $(LIBDIR) fclean
+$(SRCDIR)/%.o: $(SRCDIR)/%.c pipex.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-re	: fclean all
+clean:
+	rm -f $(OBJS)
+	$(MAKE) -C $(LIBFT_DIR) clean
 
-#Phony target declaration
-.PHONY	: all re clean fclean
+fclean: clean
+	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
+
+re: fclean all
+
+.PHONY: all clean fclean re

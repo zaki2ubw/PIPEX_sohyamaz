@@ -1,34 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check.c                                            :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/17 21:28:27 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/17 22:11:44 by sohyamaz         ###   ########.fr       */
+/*   Created: 2025/06/19 20:50:14 by sohyamaz          #+#    #+#             */
+/*   Updated: 2025/06/19 22:12:22 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	format_check(int argc)
+void	free_all(t_structs *var)
 {
-	if (argc != 5)
+	int	i;
+
+	i = 0;
+	while (var->path->dirs[i] != NULL)
 	{
-		ft_putstr_fd("usage:./pipex infile \"cmd1 -op\" \"cmd2 -op\" outfile", 2);
-		exit(ERR_BAD_FORMAT);
+		free(var->path->dirs[i]);
+		i++;
 	}
+	free(var->path->dirs);
+	free(var->ps);
+	free(var->fd);
+	free(var->path);
+	free(var->cmd);
+	free(var);
 	return ;
 }
 
-void	file_check(int *input, int *output, char *infile, char *outfile)
+void	error_exit(t_structs **var, int error)
 {
-	*input = open(infile, O_RDONLY);
-	if (*input < 0)
-		exit(ERR_FILE_OPEN_FAILED);
-	*output = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (*input < 0)
-		exit(ERR_FILE_OPEN_FAILED);
-	return ;
+	ft_putnbr_fd(error, 2);
+	free_all(*var);
+	exit (error);
 }
