@@ -1,7 +1,13 @@
 #include "pipex.h"
 
-void	parce_args(t_cmd *cmd, char **cmd, char ***dirs)
+void	parce_args(t_cmd *cmd, char **cmd, char *path)
 {
+	char	**dir;
+	
+	dir = ft_split(path, ':');
+	if (dirs == NULL)
+		error_exit(ERR_SPLIT_FAILED);
+		
 	while(dir[count] != NULL)
 	{
 		dir = ft_split(dirs[count], ' ');
@@ -15,19 +21,39 @@ void	parce_args(t_cmd *cmd, char **cmd, char ***dirs)
 		count++;	
 }
 
-void	parce_cmd(t_cmd *cmd, char **argv, char **envp)
+char	*get_path(t_cmd *cmd, char **dirs)
 {
-	char	**dirs;
-	char	*cmd1;
-	char	*cmd2;
+	char	*path;
 	int	count;
 	int	flag;
 
 	count = 0;
 	flag = 0;
-	dirs = ft_split(envp, ':');
-	if (dirs == NULL)
-		error_exit(ERR_SPLIT_FAILED);
+	while(dirs[count] != NULL)
+	{
+		flag = ft_strncmp(dirs[count], "$PATH=", 6);
+		if (flag == 0)
+		{
+			path = dirs[count];
+			return (path);
+		}
+		count++;
+	}
+	return (NULL);			
+}
+
+void	parce_cmd(t_cmd *cmd, char **argv, char **envp)
+{
+	char	**dirs;
+	char	*cmd1;
+	char	*cmd2;
+	char	*path;
+	int	count;
+	int	flag;
+
+	count = 0;
+	flag = 0;
+	path = get_path(dirs);
 	cmd1 = ft_split(argv[2], ' ');
 	if (dirs == NULL)
 		error_exit(ERR_SPLIT_FAILED);
