@@ -33,7 +33,10 @@ void	free_all(t_structs *var)
 
 void	error_exit(t_structs **var, int error)
 {
-	ft_putnbr_fd(error, 2);
-	free_all(*var);
+	if (error < 8)
+	{
+		ft_putnbr_fd(error, 2);
+		free_all(*var);
+	}
 	exit (error);
 }

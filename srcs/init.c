@@ -20,13 +20,13 @@ void	start_childs(t_structs *var)
 	if (var->ps->pid1 == -1)
 	{
 		perror("fork failed");
-		error_exit(&var, ERR_FORK_FAILED);
+		error_exit(&var, 1);
 	}
 	var->ps->pid2 = fork();
 	if (var->ps->pid2 == -1)
 	{
 		perror("fork failed");
-		error_exit(&var, ERR_FORK_FAILED);
+		error_exit(&var, 1);
 	}
 	return ;
 }
@@ -39,14 +39,14 @@ void	init_var(t_structs *var)
 	if (var == NULL)
 		error_exit(&var, ERR_NULL_VALUE_DETECTED);
 	var->fd->fd_in = open(var->cmd->infile, O_RDONLY);
-	if (var->fd->fd_in < 0)
+	if (var->fd->fd_in == -1)
 	{
 		perror("infile open failed");
 		error_exit(&var, ERR_INVALID_INFILE);
 	}
 	var->fd->fd_out = open(var->cmd->outfile, \
 	O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (var->fd->fd_in < 0)
+	if (var->fd->fd_out == -1)
 	{
 		perror("outfile open failed");
 		error_exit(&var, ERR_INVALID_OUTFILE);
@@ -55,14 +55,14 @@ void	init_var(t_structs *var)
 	if (flag == -1)
 	{
 		perror("pipe failed");
-		error_exit(&var, ERR_PIPE_FAILED);
+		error_exit(&var, PIPE_FAILED);
 	}
 	return ;
 }
 
 void	init_structs(t_structs **var, char **argv)
 {
-	if (var == NULL)
+	if (argv == NULL)
 		error_exit(var, ERR_NULL_VALUE_DETECTED);
 	*var = ft_calloc(sizeof(t_structs), 1);
 	if (*var == NULL)

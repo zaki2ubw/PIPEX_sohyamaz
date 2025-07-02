@@ -26,7 +26,7 @@ LIBFT_DIR = Libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I.
+CFLAGS = -Wall -Wextra -Werror -I. -g
 
 all: $(LIBFT_A) $(NAME)
 
