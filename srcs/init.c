@@ -20,13 +20,13 @@ void	start_childs(t_structs *var)
 	if (var->ps->pid1 == -1)
 	{
 		perror("fork failed");
-		error_exit(&var, 1);
+		error_exit(&var, ERR_FORK_FAILED);
 	}
 	var->ps->pid2 = fork();
 	if (var->ps->pid2 == -1)
 	{
 		perror("fork failed");
-		error_exit(&var, 1);
+		error_exit(&var, ERR_FORK_FAILED);
 	}
 	return ;
 }
@@ -55,7 +55,7 @@ void	init_var(t_structs *var)
 	if (flag == -1)
 	{
 		perror("pipe failed");
-		error_exit(&var, PIPE_FAILED);
+		error_exit(&var, ERR_PIPE_FAILED);
 	}
 	return ;
 }
