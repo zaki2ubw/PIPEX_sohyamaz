@@ -17,10 +17,13 @@ void	free_all(t_structs *var)
 	int	i;
 
 	i = 0;
-	while (var->path->dirs[i] != NULL)
+	if (var->path->dirs != NULL)
 	{
-		free(var->path->dirs[i]);
-		i++;
+		while (var->path->dirs[i] != NULL)
+		{
+			free(var->path->dirs[i]);
+			i++;
+		}
 	}
 	free(var->path->dirs);
 	free(var->ps);
@@ -33,10 +36,8 @@ void	free_all(t_structs *var)
 
 void	error_exit(t_structs **var, int error)
 {
-	if (error < 8)
-	{
+	if (error < 7)
 		ft_putnbr_fd(error, 2);
-		free_all(*var);
-	}
+	free_all(*var);
 	exit (error);
 }
