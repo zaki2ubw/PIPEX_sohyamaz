@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:28:27 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/19 21:57:35 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/07/06 12:15:38 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,14 @@ char	*check_cmd(t_structs *var, char *cmd)
 	{
 		tmp = ft_strjoin(var->path->dirs[count], "/");
 		full = ft_strjoin(tmp, cmd);
-		check = access(full, X_OK);
 		free(tmp);
-		if (check == 0)
+		check = access(full, X_OK);
+		if (check = -1)
+		{
+			free (full);
+			error_exit(&var, ERR_ACCESS_FAILED);
+		}
+		else if (check == 0)
 			return (full);
 		free(full);
 		count++;
