@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 20:50:14 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/07/06 12:01:46 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/07/06 15:17:09 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ void	closing_fds(t_structs *var)
 {
 	int	i;
 
+	if (var == NULL)
+		error_exit(&var, ERR_NULL_VALUE_DETECTED);
 	i = 0;
 	if (var->fd->fd_in > 0)
-		close (var->fd->fd_in);
+		close_parent_fd(var, var->fd->fd_in);
 	if (var->fd->fd_out > 0)
-		close (var->fd->fd_out);
+		close_parent_fd(var, var->fd->fd_out);
 	if (var->path->dirs != NULL)
 	{
 		while (var->path->dirs[i] != NULL)
@@ -32,22 +34,30 @@ void	closing_fds(t_structs *var)
 	return ;
 }
 
-void	put_perror(int error)
+void	close_parent_fd(t_structs *var, int fd)
 {
-	if (error < 7)
-		return ;
-	else if (error == 7)
-		perror("fork");
-	else if (error == 8)
-		perror("open");
-	else if (error == 9)
-		perror("pipe");
-	else if (error == 10)
-		perror("dup2");
-	else if (error == 11)
-		perror("access");
-	else if (error == 12)
-		perror("execve");
+	int	error;
+
+	error = 0;
+	if (var == NULL)
+		error_exit(&var, ERR_NULL_VALUE_DETECTED);
+	error = close(fd);
+	if (error == -1)
+	error_exit(&var, ERR_CLOSE_FAILED);
+	return ;
+}
+
+void	close_childs_fd(int fd)
+{
+	int	error;
+
+	error = 0;
+	error = close(fd);
+	if (error == -1)
+	{
+		perror("close");
+		exit (ERR_CLOSE_FAILED);
+	}
 	return ;
 }
 
@@ -67,8 +77,12 @@ void	error_exit(t_structs **var, int error)
 {
 	if (error < 7)
 		ft_putnbr_fd(error, 2);
-	else
-		put_perror(error);
+	else if (error == 7)
+		perror("fork");
+	else if (error == 8)
+		perror("open");
+	else if (error == 9)
+		perror("pipe");
 	free_all(*var);
 	exit (error);
 }
