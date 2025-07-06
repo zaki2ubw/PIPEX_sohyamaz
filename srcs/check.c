@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:28:27 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/07/06 12:15:38 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/07/06 15:13:18 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ void	format_check(int argc)
 	return ;
 }
 
+
 void	check_path(t_structs *var, char **envp)
 {
 	int		count;
 	int		skip;
+	char	*cmd;
 
 	if (var == NULL || envp == NULL)
 		error_exit(&var, ERR_NULL_VALUE_DETECTED);
@@ -47,7 +49,21 @@ void	check_path(t_structs *var, char **envp)
 	return ;
 }
 
-char	*check_cmd(t_structs *var, char *cmd)
+char	*access_check(char *cmd)
+{
+	int		check;
+	char	*full;
+
+	check = access(cmd, X_OK);
+	if (check == -1)
+		return (NULL);
+	full = ft_strdup(cmd);
+	if (full == NULL)
+		return (NULL);
+	return (full);
+}
+
+char	*find_path(t_structs *var, char *cmd)
 {
 	char	*tmp;
 	char	*full;
@@ -55,7 +71,6 @@ char	*check_cmd(t_structs *var, char *cmd)
 	int		check;
 
 	count = 0;
-	check = 0;
 	while (var->path->dirs[count] != NULL)
 	{
 		tmp = ft_strjoin(var->path->dirs[count], "/");
@@ -65,7 +80,7 @@ char	*check_cmd(t_structs *var, char *cmd)
 		if (check = -1)
 		{
 			free (full);
-			error_exit(&var, ERR_ACCESS_FAILED);
+			return (NULL);
 		}
 		else if (check == 0)
 			return (full);
@@ -73,4 +88,16 @@ char	*check_cmd(t_structs *var, char *cmd)
 		count++;
 	}
 	return (NULL);
+}
+
+char	*check_cmd(t_structs *var, char *cmd)
+{
+	char	*tmp;
+
+	tmp = ft_strchr(cmd, '/');
+	if (tmp != NULL)
+		tmp = access_check(cmd);
+	else
+		tmp = find_path(var, cmd);
+	return (tmp);
 }
