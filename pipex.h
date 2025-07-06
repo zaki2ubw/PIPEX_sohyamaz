@@ -82,6 +82,7 @@ void	exec_first_cmd(t_structs *var, char **envp);
 void	exec_second_cmd(t_structs *var, char **envp);
 
 //exit.c	
+void	closing_fds(t_structs *var);
 void	free_all(t_structs *var);
 void	error_exit(t_structs **var, int error);
 

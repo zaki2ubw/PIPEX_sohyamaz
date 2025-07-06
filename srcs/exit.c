@@ -12,11 +12,15 @@
 
 #include "pipex.h"
 
-void	free_all(t_structs *var)
+void	closing_fds(t_structs *var)
 {
 	int	i;
 
 	i = 0;
+	if (var->fd->fd_in > 0)
+		close (var->fd->fd_in);
+	if (var->fd->fd_out > 0)
+		close (var->fd->fd_out);
 	if (var->path->dirs != NULL)
 	{
 		while (var->path->dirs[i] != NULL)
@@ -25,6 +29,13 @@ void	free_all(t_structs *var)
 			i++;
 		}
 	}
+	return ;
+}
+
+
+void	free_all(t_structs *var)
+{
+	closing_fds(var);
 	free(var->path->dirs);
 	free(var->ps);
 	free(var->fd);

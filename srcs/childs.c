@@ -27,6 +27,8 @@ void	exec_childs(t_structs *var, char **argv, char **envp)
 	return ;
 }
 
+//fix systemcall always returns int value, add err handle
+
 void	exec_first_cmd(t_structs *var, char **envp)
 {
 	dup2(var->fd->fd_in, STDIN_FILENO);
