@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 19:05:40 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/19 21:58:59 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/07/06 20:24:02 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,31 @@ typedef struct s_proc
 # define ERR_SPLIT_FAILED 5
 # define ERR_INVALID_CMD 6
 # define ERR_FORK_FAILED 7
-# define ERR_INVALID_INFILE 8
-# define ERR_INVALID_OUTFILE 9
-# define ERR_PIPE_FAILED 10
+# define ERR_OPEN_FAILED 8
+# define ERR_PIPE_FAILED 9
+# define ERR_DUP2_FAILED 10
+# define ERR_ACCESS_FAILED 11
+# define ERR_EXECV_FAILED 12
+# define ERR_CLOSE_FAILED 13
 
 //check.c
 void	format_check(int argc);
 void	check_path(t_structs *var, char **envp);
+char	*access_check(char *cmd);
+char	*find_path(t_structs *var, char *cmd);
 char	*check_cmd(t_structs *var, char *cmd);
 
 //childs.c
+void	free_splits(char **cmd);
 void	exec_childs(t_structs *var, char **argv, char **envp);
+void	childs_dup(int old, int latest);
 void	exec_first_cmd(t_structs *var, char **envp);
 void	exec_second_cmd(t_structs *var, char **envp);
 
 //exit.c	
 void	closing_fds(t_structs *var);
+void	close_parent_fd(t_structs *var, int fd);
+void	close_childs_fd(int fd);
 void	free_all(t_structs *var);
 void	error_exit(t_structs **var, int error);
 

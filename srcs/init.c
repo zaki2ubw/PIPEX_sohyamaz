@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:11:56 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/07/06 12:09:15 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/07/06 19:19:51 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,13 @@ void	start_childs(t_structs *var)
 	var->ps->pid1 = fork();
 	if (var->ps->pid1 == -1)
 		error_exit(&var, ERR_FORK_FAILED);
+	if (var->ps->pid1 == 0)
+		return ;
 	var->ps->pid2 = fork();
 	if (var->ps->pid2 == -1)
 		error_exit(&var, ERR_FORK_FAILED);
+	if (var->ps->pid2 == 0)
+		return ;
 	return ;
 }
 

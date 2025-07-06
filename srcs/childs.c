@@ -6,11 +6,29 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 19:45:31 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/07/06 15:20:10 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/07/06 21:06:10 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	free_splits(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	if (cmd == NULL)
+		return ;
+	while (1)
+	{
+		if (cmd[i] == NULL)
+			break ;
+		free(cmd[i]);
+		i++;
+	}
+	free(cmd);
+	return ;
+}
 
 void	exec_childs(t_structs *var, char **argv, char **envp)
 {
@@ -20,8 +38,8 @@ void	exec_childs(t_structs *var, char **argv, char **envp)
 		exec_first_cmd(var, envp);
 	if (var->ps->pid2 == 0)
 		exec_second_cmd(var, envp);
-	close_parents_fd(var, var->fd->pipefd[0]);
-	close_parents_fd(var, var->fd->pipefd[1]);
+	close_parent_fd(var, var->fd->pipefd[0]);
+	close_parent_fd(var, var->fd->pipefd[1]);
 	waitpid(var->ps->pid1, NULL, 0);
 	waitpid(var->ps->pid2, NULL, 0);
 	return ;
@@ -44,8 +62,8 @@ void	exec_first_cmd(t_structs *var, char **envp)
 {
 	childs_dup(var->fd->fd_in, STDIN_FILENO);
 	childs_dup(var->fd->pipefd[1], STDOUT_FILENO);
-	close_childs_fd(var, var->fd->pipefd[0]);
-	close_childs_fd(var, var->fd->pipefd[1]);
+	close_childs_fd(var->fd->pipefd[0]);
+	close_childs_fd(var->fd->pipefd[1]);
 	var->path->cmd1 = ft_split(var->cmd->cmd1, ' ');
 	if (var->path->cmd1 == NULL)
 		exit(ERR_SPLIT_FAILED);
@@ -53,10 +71,12 @@ void	exec_first_cmd(t_structs *var, char **envp)
 	if (var->path->fullpath1 == NULL)
 	{
 		perror("access");
+		free_all(var);
 		exit (ERR_INVALID_CMD);
 	}
 	execve(var->path->fullpath1, var->path->cmd1, envp);
 	perror("execve");
+	free_all(var);
 	exit(127);
 }
 
@@ -64,8 +84,8 @@ void	exec_second_cmd(t_structs *var, char **envp)
 {
 	childs_dup(var->fd->pipefd[0], STDIN_FILENO);
 	childs_dup(var->fd->fd_out, STDOUT_FILENO);
-	close_childs_fd(var, var->fd->pipefd[0]);
-	close_childs_fd(var, var->fd->pipefd[1]);
+	close_childs_fd(var->fd->pipefd[0]);
+	close_childs_fd(var->fd->pipefd[1]);
 	var->path->cmd2 = ft_split(var->cmd->cmd2, ' ');
 	if (var->path->cmd2 == NULL)
 		exit(ERR_SPLIT_FAILED);
@@ -73,9 +93,11 @@ void	exec_second_cmd(t_structs *var, char **envp)
 	if (var->path->fullpath2 == NULL)
 	{
 		perror("access");
-		exit (ERR_INVALID_CMD);
+		free_all(var);
+		exit(ERR_INVALID_CMD);
 	}
 	execve(var->path->fullpath2, var->path->cmd2, envp);
 	perror("execve");
+	free_all(var);
 	exit(127);
 }

@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 20:50:14 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/07/06 15:17:09 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/07/06 20:59:11 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,6 @@ void	closing_fds(t_structs *var)
 		close_parent_fd(var, var->fd->fd_in);
 	if (var->fd->fd_out > 0)
 		close_parent_fd(var, var->fd->fd_out);
-	if (var->path->dirs != NULL)
-	{
-		while (var->path->dirs[i] != NULL)
-		{
-			free(var->path->dirs[i]);
-			i++;
-		}
-	}
 	return ;
 }
 
@@ -43,7 +35,7 @@ void	close_parent_fd(t_structs *var, int fd)
 		error_exit(&var, ERR_NULL_VALUE_DETECTED);
 	error = close(fd);
 	if (error == -1)
-	error_exit(&var, ERR_CLOSE_FAILED);
+		error_exit(&var, ERR_CLOSE_FAILED);
 	return ;
 }
 
@@ -64,7 +56,9 @@ void	close_childs_fd(int fd)
 void	free_all(t_structs *var)
 {
 	closing_fds(var);
-	free(var->path->dirs);
+	free_splits(var->path->cmd1);
+	free_splits(var->path->cmd2);
+	free_splits(var->path->dirs);
 	free(var->ps);
 	free(var->fd);
 	free(var->path);

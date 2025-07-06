@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:28:27 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/07/06 15:13:18 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/07/06 20:41:57 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,17 @@ void	format_check(int argc)
 {
 	if (argc != 5)
 	{
-		ft_putstr_fd \
-		("usage:./pipex infile \"cmd1 -op\" \"cmd2 -op\" outfile", 2);
+		ft_putstr_fd("usage:./pipex infile \"cmd1 -op\" \"cmd2 -op\" outfile",
+			2);
 		exit(ERR_BAD_FORMAT);
 	}
 	return ;
 }
 
-
 void	check_path(t_structs *var, char **envp)
 {
-	int		count;
-	int		skip;
-	char	*cmd;
+	int	count;
+	int	skip;
 
 	if (var == NULL || envp == NULL)
 		error_exit(&var, ERR_NULL_VALUE_DETECTED);
@@ -75,14 +73,9 @@ char	*find_path(t_structs *var, char *cmd)
 	{
 		tmp = ft_strjoin(var->path->dirs[count], "/");
 		full = ft_strjoin(tmp, cmd);
-		free(tmp);
 		check = access(full, X_OK);
-		if (check = -1)
-		{
-			free (full);
-			return (NULL);
-		}
-		else if (check == 0)
+		free(tmp);
+		if (check == 0)
 			return (full);
 		free(full);
 		count++;
