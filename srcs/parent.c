@@ -21,7 +21,7 @@ void	make_list(int argc, char **argv, t_parent *master)
 	{
 		tmp->next = ft_calloc(sizeof(t_node), 1);
 		if (tmp->next == NULL)
-			error_exit(calloc, NULL);
+			error_exit("calloc", NULL);
 		tmp->next->prev = tmp;
 		tmp = tmp->next;
 		i++;
@@ -45,4 +45,48 @@ void	place_args(int argc, char **argv, t_parent *master)
 		tmp = tmp->next;
 		i++;
 	}
+	return ;
+}
+
+void	split_env(char **envp, t_parent *master)
+{
+	int		i;
+	char	**tmp;
+
+	i = 0;
+	tmp = NULL;
+	while (envp[i] != NULL)
+	{
+		check = ft_strncmp(envp[i], "PATH=", 5);
+		if (check == 0)
+		{
+			tmp = ft_split(envp[i] + 5, ':');
+			break;
+		}
+		i++;
+	}
+	master->path = tmp;
+	return ;
+}
+
+void	make_pipe(int argc, t_parent *master)
+{
+	int		i;
+	t_node	*tmp;
+
+	i = 0;
+	tmp = master->head;
+	while (i < argc)
+	{
+		if (i > 1 && i < (argc - 1))
+		{
+			check = pipe(tmp->pipefd);
+			if (check == -1)
+				error_exit("pipe", master);
+		}
+		tmp = tmp->next;
+		i++;
+	}
+	return ;
+}
 

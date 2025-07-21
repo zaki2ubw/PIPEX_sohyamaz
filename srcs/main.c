@@ -10,11 +10,15 @@ int		main(int argc, char **argv, char **envp)
 	check_argc(argc);
 	//place	:all args into the list
 	make_list(argc, argv);
+	place_args(argc, argv, *master)
 	//split	:cut off envp
 	//find	:search if envp has "path"? and put it into *path
+	split_env(envp, *master);
 	//pipe	:generate a pipe;
-	//fork	:generate 2 childs
+	make_pipe(argc, *master);
 	//open	:exec open and validate in/outfile
+
+	//fork	:generate 2 childs
 	//join	:concatenate path and cmds
 	//check	:validate cmd with access
 	//dup2	:connect pipefd to stdin/out

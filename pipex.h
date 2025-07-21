@@ -22,11 +22,12 @@ typedef struct s_node
 	int				exit_code;
 	int				fd_in;
 	int				fd_out;
+	int				pipefd[2];
 	pid_t			pid;
 } t_node;
 
 typedef struct s_parent
 {
 	struct s_node	*head;
-	char			*path;
+	char			**path;
 
