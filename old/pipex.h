@@ -88,7 +88,7 @@ void	childs_dup(int old, int latest);
 void	exec_first_cmd(t_structs *var, char **envp);
 void	exec_second_cmd(t_structs *var, char **envp);
 
-//exit.c	
+//exit.c
 void	closing_fds(t_structs *var);
 void	close_parent_fd(t_structs *var, int fd);
 void	close_childs_fd(int fd);
