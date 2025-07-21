@@ -17,7 +17,7 @@ int		main(int argc, char **argv, char **envp)
 	//pipe	:generate a pipe;
 	make_pipe(argc, *master);
 	//open	:exec open and validate in/outfile
-
+	open_check(argc, *master);
 	//fork	:generate 2 childs
 	//join	:concatenate path and cmds
 	//check	:validate cmd with access

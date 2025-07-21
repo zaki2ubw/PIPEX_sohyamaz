@@ -90,3 +90,20 @@ void	make_pipe(int argc, t_parent *master)
 	return ;
 }
 
+void	open_check(int argc, t_parent *master)
+{
+	int		i;
+	t_node	*tmp;
+
+	i = 0;
+	tmp = master->head;
+	while (i < argc)
+	{
+		if (i == 1 || i == (argc - 1))
+			tmp->exec_status = open(tmp->arg);
+		tmp = tmp->next;
+		i++;
+	}
+	return ;
+}
+
