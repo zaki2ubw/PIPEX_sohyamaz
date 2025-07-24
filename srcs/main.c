@@ -19,6 +19,8 @@ int		main(int argc, char **argv, char **envp)
 	//open	:exec open and validate in/outfile
 	open_check(argc, *master);
 	//fork	:generate 2 childs
+	start_child(master->in->pid, *master);
+	start_child(master->out->pid, *master);
 	//join	:concatenate path and cmds
 	//check	:validate cmd with access
 	//dup2	:connect pipefd to stdin/out

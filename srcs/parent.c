@@ -22,6 +22,10 @@ void	make_list(int argc, char **argv, t_parent *master)
 		tmp->next = ft_calloc(sizeof(t_node), 1);
 		if (tmp->next == NULL)
 			error_exit("calloc", NULL);
+		if (i == 2)
+			master->in = tmp;
+		else if (i == argc - 2)
+			master->out = tmp;
 		tmp->next->prev = tmp;
 		tmp = tmp->next;
 		i++;
@@ -107,3 +111,14 @@ void	open_check(int argc, t_parent *master)
 	return ;
 }
 
+void	start_child(t_parent *master, int pid)
+{
+	if (master == NULL)
+		erorr_exit("NULL", master);
+	pid = fork();
+	if (pid == -1)
+		error_exit("fork", master);
+	else if (pid == 0)
+		step_child(master);
+	return ;
+}

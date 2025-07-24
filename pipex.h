@@ -30,4 +30,5 @@ typedef struct s_parent
 {
 	struct s_node	*head;
 	char			**path;
-
+	struct s_node	*in;
+	struct s_node	*out;
