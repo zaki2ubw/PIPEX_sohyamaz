@@ -15,23 +15,19 @@ void	make_list(int argc, char **argv, t_parent *master)
 	t_node	*tmp;
 	int		i;
 
-	tmp = master->head;
+	tmp = master->arg_head;
 	i = 0;
-	while (i < argc && tmp->next != master->head)
+	while (i < argc && tmp->next != master->arg_head)
 	{
 		tmp->next = ft_calloc(sizeof(t_node), 1);
 		if (tmp->next == NULL)
 			error_exit("calloc", NULL);
-		if (i == 2)
-			master->in = tmp;
-		else if (i == argc - 2)
-			master->out = tmp;
 		tmp->next->prev = tmp;
 		tmp = tmp->next;
 		i++;
 	}
-	tmp->next = master->head;
-	master->head->prev = tmp
+	tmp->next = master->arg_head;
+	master->arg_head->prev = tmp
 	return ;
 }
 
@@ -41,11 +37,11 @@ void	place_args(int argc, char **argv, t_parent *master)
 	t_node	tmp;
 
 	i = 0;
-	tmp = master->head
+	tmp = master->arg_head
 	while (i < argc)
 	{
-		tmp->arg = argv[i];
-		tmp->num = i;
+		tmp->value = argv[i];
+		tmp->index = i;
 		tmp = tmp->next;
 		i++;
 	}
@@ -73,13 +69,13 @@ void	split_env(char **envp, t_parent *master)
 	return ;
 }
 
-void	make_pipe(int argc, t_parent *master)
+void	make_pipes(int argc, t_parent *master)
 {
 	int		i;
 	t_node	*tmp;
 
 	i = 0;
-	tmp = master->head;
+	tmp = master->pipe_head;
 	while (i < argc)
 	{
 		if (i > 1 && i < (argc - 1))
@@ -100,15 +96,49 @@ void	open_check(int argc, t_parent *master)
 	t_node	*tmp;
 
 	i = 0;
-	tmp = master->head;
+	tmp = master->arg_head;
 	while (i < argc)
 	{
-		if (i == 1 || i == (argc - 1))
-			tmp->exec_status = open(tmp->arg);
+		if (tmp->index == 1|| tmp->index == (argc - 1))
+			tmp->exit_code = open(tmp->value);
 		tmp = tmp->next;
 		i++;
 	}
 	return ;
+}
+
+void	access_check(int argc ,t_parent *master)
+{
+	int		num;
+	int		i;
+	t_node	tmp;
+
+	i = 0;
+	num = argc - 3;
+	tmp	= master->in->next;
+	while (i < num)
+	{
+		tmp->valid = find_cmd(tmp->cmd[0], master->path);
+		tmp = tmp->next;
+		i++;
+	}
+	return ;
+}
+
+int		find_cmd(char *cmd, char **path)
+{
+	while (path[i] != NULL)
+	{
+		base = ft_strjoin(path[i], "/");
+		fullpath = ft_strjoin(base, cmd);
+		free(base);
+		check = access(fullpath, X_OK);
+		free(fullpath);
+		if (check == 0)
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void	start_child(t_parent *master, int pid)

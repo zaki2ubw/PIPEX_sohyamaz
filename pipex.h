@@ -13,22 +13,29 @@ typedef struct s_node
 {
 	struct s_node	*prev;
 	struct s_node	*next;
-	char			*arg;
+	char			*value;
 	char			**cmd;
 	char			*fullpath;
-	int				num;
+	int				index;
 	int				vaild;
 	int				exec_status;
 	int				exit_code;
 	int				fd_in;
 	int				fd_out;
-	int				pipefd[2];
 	pid_t			pid;
 } t_node;
 
+typedef struct s_pipe
+{
+	struct s_pipe	*prev;
+	struct s_pipe	*next;
+	int				pipefd[2];
+}
+
 typedef struct s_parent
 {
-	struct s_node	*head;
+	struct s_node	*arg_head;
 	char			**path;
 	struct s_node	*in;
 	struct s_node	*out;
+	struct s_pipe	pipe_head;
