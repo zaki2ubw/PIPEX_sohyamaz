@@ -107,6 +107,26 @@ void	open_check(int argc, t_parent *master)
 	return ;
 }
 
+void	split_cmd(int argc, t_parent *master)
+{
+	int		num;
+	int		i;
+	t_node	*tmp;
+
+	i = 0;
+	num = argc - 1;
+	tmp = master->in->next;
+	while (i < num || tmp != master->out)
+	{
+		tmp->cmd = ft_split(tmp->value);
+		if (tmp->cmd == NULL)
+			error_exit("split", master);
+		tmp = tmp->next;
+		i++;
+	}
+	return ;
+}
+
 void	access_check(int argc ,t_parent *master)
 {
 	int		num;
@@ -114,9 +134,9 @@ void	access_check(int argc ,t_parent *master)
 	t_node	tmp;
 
 	i = 0;
-	num = argc - 3;
+	num = argc - 1;
 	tmp	= master->in->next;
-	while (i < num)
+	while (i < num || tmp != master->out)
 	{
 		tmp->valid = find_cmd(tmp->cmd[0], master->path);
 		tmp = tmp->next;
