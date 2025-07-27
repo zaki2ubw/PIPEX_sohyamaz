@@ -18,11 +18,13 @@ int		main(int argc, char **argv, char **envp)
 	make_pipe(argc, *master);
 	//open	:exec open and validate in/outfile
 	open_check(argc, *master);
+	//split	:cut off cmd
+	split_cmd(argc, *master);
+	//find	:find cmd name
+	access_check(argc, *master)
 	//fork	:generate 2 childs
 	start_child(master->in->pid, *master);
 	start_child(master->out->pid, *master);
-	//join	:concatenate path and cmds
-	//check	:validate cmd with access
 	//dup2	:connect pipefd to stdin/out
 	//wait	:close fd and wait childs
 	//exec	:exec cmds in child process
