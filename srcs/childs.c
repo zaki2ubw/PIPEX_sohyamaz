@@ -1,6 +1,6 @@
 #include "pipex.h"
 
-void	dup_childs(int argc, t_parent *master)
+void	dup_childs(t_parent *master, int pid)
 {
 		int		num;
 		int		i;

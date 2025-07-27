@@ -90,6 +90,36 @@ void	make_pipes(int argc, t_parent *master)
 	return ;
 }
 
+void	select_fds(int argc, t_parent *master)
+{
+	t_pipe	*now;
+	t_node	*current;
+
+	now = master->pipe_head;
+	current = master->in->next;
+	while (current != master->out)
+	{
+		if (current->prev == master->in)
+		{
+			current->fd_in = master->in->exit_code;
+			current->fd_out = now->pipefd[0];
+		}
+		else if (current->next == master->out)
+		{
+			current->fd_in = now->prev->pipefd[1];
+			current->fd_out = master->out->exit_code;
+		}
+		else
+		{
+			current->fd_in = now->prev->pipefd[1];
+			current->fd_out = now->pipefd[0];
+		}
+		now = now->next;
+		current = current->next;
+	}
+	return ;
+}
+
 void	open_check(int argc, t_parent *master)
 {
 	int		i;
@@ -161,14 +191,24 @@ int		find_cmd(char *cmd, char **path)
 	return (1);
 }
 
-void	start_child(t_parent *master, int pid)
+void	start_childs(t_parent *master)
 {
+	t_node	*current;
+	int		i;
+
 	if (master == NULL)
 		erorr_exit("NULL", master);
-	pid = fork();
-	if (pid == -1)
-		error_exit("fork", master);
-	else if (pid == 0)
-		step_child(master);
+	current = master->in->next;
+	i = 2;
+	while (i < argc - 1 || current != master->out)
+	{
+		current->pid = fork()
+		if (pid == -1)
+			error_exit("fork", master);
+		else if (pid == 0)
+			dup_childs(master, current->pid);
+		current = current->next;
+		i++;
+	}
 	return ;
 }
