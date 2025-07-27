@@ -95,10 +95,39 @@ void	select_fds(int argc, t_parent *master)
 	t_pipe	*now;
 	t_node	*current;
 
+	if (master == NULL)
+		error_exit("NULL", master);
 	now = master->pipe_head;
 	current = master->in->next;
 	while (current != master->out)
 	{
+		if (current == NULL)
+			current = list_recover(master);
+		else
+		{
+			if (now == NULL)
+				current->fd_in = -1;
+			else
+				set_fd_in(current, now);
+			if (now->next == NULL)
+				current->fd_out = -1;
+			else
+				set_fd_out(current, now);
+		}
+		current == current->next;
+	}
+	return;
+}
+
+int		set_fd_in(t_node *current, t_pipe *now)
+{
+	if (current == NULL)
+		return (-1);
+
+		if (now == NULL)
+		{
+			current->fd_in = -1;
+			current->fd_out =
 		if (current->prev == master->in)
 		{
 			current->fd_in = master->in->exit_code;
