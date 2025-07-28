@@ -111,6 +111,10 @@ void	select_fds(int argc, t_parent *master)
 			current = list_recover(master);
 		else
 			current == current->next;
+		if (now->next == NULL)
+			now = pipe_skip(master);
+		else
+			now = now->next;
 	}
 	return;
 }
@@ -133,6 +137,16 @@ int		set_fds(t_node *current, t_pipe *now)
 			current->next->fd_in = now->pipefd[1];
 	}
 	return ;
+}
+
+t_node	*list_recover(t_parent *master)
+{
+	t_node	*current;
+
+	current = master->arg_head;
+	while (current->prev != NULL)
+		current = current->prev;
+	return (current);
 }
 
 void	open_check(int argc, t_parent *master)
