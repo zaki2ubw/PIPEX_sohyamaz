@@ -101,50 +101,36 @@ void	select_fds(int argc, t_parent *master)
 	current = master->in->next;
 	while (current != master->out)
 	{
-		if (current == NULL)
+		if (current->prev == master->in)
+			current->fd_in = master->in->exit_code;
+		if (current->next == master->out)
+			current->fd_out = master->out->exit_code;
+		else
+			set_fds(current, now);
+		if (current->next == NULL)
 			current = list_recover(master);
 		else
-		{
-			if (now == NULL)
-				current->fd_in = -1;
-			else
-				set_fd_in(current, now);
-			if (now->next == NULL)
-				current->fd_out = -1;
-			else
-				set_fd_out(current, now);
-		}
-		current == current->next;
+			current == current->next;
 	}
 	return;
 }
 
-int		set_fd_in(t_node *current, t_pipe *now)
+int		set_fds(t_node *current, t_pipe *now)
 {
-	if (current == NULL)
-		return (-1);
+	int		safety;
 
-		if (now == NULL)
-		{
-			current->fd_in = -1;
-			current->fd_out =
-		if (current->prev == master->in)
-		{
-			current->fd_in = master->in->exit_code;
-			current->fd_out = now->pipefd[0];
-		}
-		else if (current->next == master->out)
-		{
-			current->fd_in = now->prev->pipefd[1];
-			current->fd_out = master->out->exit_code;
-		}
-		else
-		{
-			current->fd_in = now->prev->pipefd[1];
-			current->fd_out = now->pipefd[0];
-		}
-		now = now->next;
-		current = current->next;
+	safety = 0;
+	if (current == NULL)
+		return ;
+	else if (current->next == NULL)
+		safety = 1;
+	if (now == NULL)
+		current->fd_out = -1;
+	else
+	{
+		current->fd_out = now->pipefd[0];
+		if (safety != 1)
+			current->next->fd_in = now->pipefd[1];
 	}
 	return ;
 }
