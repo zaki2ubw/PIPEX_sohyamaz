@@ -16,28 +16,16 @@ typedef struct s_node
 	char			*value;
 	char			**cmd;
 	char			*fullpath;
-	int				exit_code;
+	int				writefd;
 	pid_t			pid;
 } t_node;
-
-//typedef struct s_fds
-//{
-//	int				fd;
-//	int				state;
-//} t_fds;
-
-typedef struct s_mfds //m means mandatory
-{
-	int				pipefd[2][2];
-	int				fdstate[2];
-} t_mfds;
 
 typedef struct s_parent
 {
 	struct s_node	*arg_head;
-	char			**path;
 	struct s_node	*in;
 	struct s_node	*out;
-	struct s_mfds	*fds;
+	char			**path;
 	int				cmds;
+	int				exit_code;
 } t_parent;
