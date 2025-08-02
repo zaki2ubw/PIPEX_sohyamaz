@@ -6,19 +6,14 @@ int		main(int argc, char **argv, char **envp)
 	int			exitcode;
 
 	exitcode = 0;
-	master = ft_calloc(sizeof(t_parent), 1);
-	master->arg_head = ft_calloc(sizeof(t_node), 1);
-	//check	:is argc = 5?
-	check_argc(argc, master);
-	//place	:all args into the list
+	master = NULL;
+	check_argc(argc);
+	init_parent(master);
 	make_list(argc, argv);
-	place_args(argc, argv, master)
-	//split	:cut off envp
-	//find	:search if envp has "path"? and put it into *path
+	place_args(argc, argv, master);
 	split_env(envp, master);
-	fork_cmds(master);
-	close_and_wait(master);
-	exitcode = master->out->prev->exitcode;
+	make_procs(master);
+	exitcode = wait_childs(master);
 	free_all(master);
 	return (exitcode);
 }
