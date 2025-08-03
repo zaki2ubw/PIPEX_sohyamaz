@@ -1,26 +1,5 @@
 #include "pipex.h"
 
-void	swap_safetyfd(t_parent *master, t_node *cmd, int *readfd)
-{
-	if (master == NULL || cmd == NULL)
-		child_exit("NULL", master);
-	if (*readfd < 0)
-	{
-		*readfd = open("/dev/null", O_RDONLY);
-		if (*readfd < 0)
-			child_exit("open", master);
-	}
-	if (cmd->writefd < 0)
-	{
-		if (cmd->next == master->out)
-			exit(127);
-		cmd->writefd = open("/dev/null", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (cmd->writefd < 0)
-			child_exit("open", master);
-	}
-	return ;
-}
-
 void	make_pipe(t_parent *master, int *pipefd)
 {
 	int		check;
@@ -63,7 +42,7 @@ void	dup_fds(t_parent *master, t_node *cmd, int readfd, int unusefd)
 	return ;
 }
 
-void	split_cmd(t_parent *master, t_node *cmd)//現在コマンドとopを分割
+void	split_cmd(t_parent *master, t_node *cmd)
 {
 	if (master == NULL || cmd == NULL || cmd->value == NULL)
 		child_exit("NULL", master);
@@ -99,14 +78,12 @@ void	check_cmdtype(t_parent *master, t_node *cmd)
 void	find_cmd(t_parent *master, t_node *cmd)
 {
 	int		i;
-	int		check;
 	char	*dir;
 	char	*full;
 
 	if (master == NULL || cmd == NULL)
 		child_exit("NULL", master);
 	i = 0;
-	check = 0;
 	while (master->path[i] != NULL)
 	{
 		dir = ft_strjoin(master->path[i], "/");
@@ -116,8 +93,7 @@ void	find_cmd(t_parent *master, t_node *cmd)
 		if (full == NULL)
 			child_exit("join", master);
 		free(dir);
-		check = access(full, X_OK);
-		if (check == 0)
+		if (access(full, X_OK) == 0)
 		{
 			cmd->fullpath = full;
 			return ;
