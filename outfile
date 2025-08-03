@@ -1,9 +1,0 @@
-total 28
-drwxr-xr-x 2 sohyamaz sohyamaz 4096 Jul  6 00:50 Libft
--rw-r--r-- 1 sohyamaz sohyamaz   14 Jun 18 02:27 README.md
--rw-r--r-- 1 sohyamaz sohyamaz 2355 Jul  6 00:50 fixlist.md
-drwxr-xr-x 2 sohyamaz sohyamaz 4096 Jul 19 19:23 old
--rw-r--r-- 1 sohyamaz sohyamaz    0 Jul 19 19:30 outfile
--rw-r--r-- 1 sohyamaz sohyamaz  226 Jul 19 19:23 pipex.h
-drwxr-xr-x 4 sohyamaz sohyamaz 4096 Jul  6 00:29 pipex_tester
-drwxr-xr-x 2 sohyamaz sohyamaz 4096 Jul 18 05:23 srcs
