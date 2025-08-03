@@ -1,6 +1,6 @@
 #include "pipex.h"
 
-int		wait_childs(t_parent *master)
+int	wait_childs(t_parent *master)
 {
 	int		i;
 	int		status;
@@ -24,7 +24,7 @@ int		wait_childs(t_parent *master)
 	return (exitcode);
 }
 
-int		code_checker(int status)
+int	code_checker(int status)
 {
 	int		checker;
 	int		exitcode;
