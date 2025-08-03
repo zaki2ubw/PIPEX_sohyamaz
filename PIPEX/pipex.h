@@ -8,7 +8,6 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "Libft/libft.h"
-# include <errno.h>
 
 typedef struct s_node
 {

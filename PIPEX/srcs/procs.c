@@ -41,7 +41,7 @@ pid_t	fork_child(t_parent *master, t_node *cmd, int readfd, int unusefd)
 	return (pid);
 }
 
-int		open_file(t_parent *master, t_node *file)
+int	open_file(t_parent *master, t_node *file)
 {
 	int		check;
 
@@ -51,7 +51,6 @@ int		open_file(t_parent *master, t_node *file)
 		check = open(file->value, O_RDONLY);
 	else
 		check = open(file->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	fprintf(stderr, "DEBUG: open %s => fd=%d, errno=%d\n",file->value, check, errno);
 	if (check < 0 && file == master->in)
 		child_exit("open", master);
 	else if (check < 0 && file == master->out)
@@ -59,7 +58,7 @@ int		open_file(t_parent *master, t_node *file)
 	return (check);
 }
 
-int		cleanup_fds(int readfd, int *pipefd)
+int	cleanup_fds(int readfd, int *pipefd)
 {
 	int		check;
 
@@ -87,7 +86,6 @@ void	exec_child(t_parent *master, t_node *cmd, int readfd, int unusefd)
 		child_exit("NULL", master);
 	if (readfd < 0 || cmd->writefd < 0)
 		child_exit("open", master);
-		//swap_safetyfd(master, cmd, &readfd);
 	if (cmd == master->in->next)
 		readfd = open_file(master, master->in);
 	if (cmd == master->out->prev)
