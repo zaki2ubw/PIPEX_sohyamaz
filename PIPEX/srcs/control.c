@@ -28,7 +28,7 @@ void	free_all(t_parent *master)
 	}
 	free_strs(master->path);
 	free(master);
-	return;
+	return ;
 }
 
 void	close_pipefd(int *pipefd)
