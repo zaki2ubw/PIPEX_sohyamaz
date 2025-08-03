@@ -7,9 +7,9 @@ int		main(int argc, char **argv, char **envp)
 
 	exitcode = 0;
 	master = NULL;
-	check_argc(argc);
-	init_parent(master);
-	make_list(argc, argv);
+	//check_argc(argc);
+	init_parent(argc, &master);
+	make_list(master);
 	place_args(argc, argv, master);
 	split_env(envp, master);
 	make_procs(master);

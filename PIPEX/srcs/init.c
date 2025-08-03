@@ -1,6 +1,6 @@
 #include "pipex.h"
 
-void	check_argc(int argc, t_parent *master)
+void	check_argc(int argc)
 {
 	if (argc != 5)
 	{
@@ -10,36 +10,40 @@ void	check_argc(int argc, t_parent *master)
 	return ;
 }
 
-void	init_parent(t_parent **master)
+void	init_parent(int argc, t_parent **master)
 {
-	*master = ft_calloc(sizeof(t_parent), 1);
+	*master = ft_calloc(1, sizeof(t_parent));
 	if (*master == NULL)
 		error_exit("ft_calloc", NULL);
-	(*master)->in = ft_calloc(sizeof(t_node), 1);
+	(*master)->in = ft_calloc(1, sizeof(t_node));
 	if ((*master)->in == NULL)
 		error_exit("ft_calloc", *master);
 	(*master)->cmds = argc - 3;
 	return ;
 }
 
-void	make_list(int argc, t_parent *master)
+void	make_list(t_parent *master)
 {
 	t_node	*current;
 	int		i;
 
 	current = master->in;
-	i = 2;
-	while (i < (argc - 2))
+	i = 0;
+	while (i < master->cmds)
 	{
-		current->next = ft_calloc(sizeof(t_node), 1);
+		current->next = ft_calloc(1, sizeof(t_node));
 		if (current->next == NULL)
 			error_exit("ft_calloc", master);
 		current->next->prev = current;
 		current = current->next;
 		i++;
 	}
-	master->out = current;
-	current->next = NULL;
+	master->out = ft_calloc(1, sizeof(t_node));
+	if (master->out == NULL)
+		error_exit("ft_calloc", master);
+	master->out->prev = current;
+	current->next = master->out;
+	master->out->next = NULL;
 	return ;
 }
 
@@ -63,7 +67,7 @@ void	split_env(char **envp, t_parent *master)
 {
 	int		i;
 	int		check;
-	char	*tmp;
+	char	**tmp;
 
 	i = 0;
 	check = 0;

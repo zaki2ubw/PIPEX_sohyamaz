@@ -11,6 +11,7 @@ int		wait_childs(t_parent *master)
 		error_exit("NULL", master);
 	i = 0;
 	exitcode = 0;
+	status = 0;
 	current = master->in->next;
 	while (i < master->cmds && current != master->out)
 	{
@@ -40,4 +41,14 @@ int		code_checker(int status)
 			exitcode = 128 + WTERMSIG(status);
 	}
 	return (exitcode);
+}
+
+void	outfile_exit(char *error, t_parent *master)
+{
+	if (error == NULL)
+		perror("NULL");
+	else
+		perror(error);
+	free_all(master);
+	exit(1);
 }
