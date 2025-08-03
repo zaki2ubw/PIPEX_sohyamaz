@@ -4,7 +4,8 @@ void	check_argc(int argc)
 {
 	if (argc != 5)
 	{
-		ft_putstr_fd("usage:./pipex infile \"cmd1 -op\" \"cmd2 -op\" outfile\n", 2);
+		ft_putstr_fd \
+("usage:./pipex infile \"cmd1 -op\" \"cmd2 -op\" outfile\n", 2);
 		error_exit("argc", NULL);
 	}
 	return ;
@@ -78,7 +79,7 @@ void	split_env(char **envp, t_parent *master)
 		if (check == 0)
 		{
 			tmp = ft_split(envp[i] + 5, ':');
-			break;
+			break ;
 		}
 		i++;
 	}
