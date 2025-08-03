@@ -40,3 +40,14 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+
+# ===== Bonus target =====
+BONUS_MAIN = srcs/main_bonus.c
+BONUS_OBJ  = srcs/main_bonus.o
+BONUS_OBJS = $(filter-out srcs/main.o, $(SRCS:.c=.o)) $(BONUS_OBJ)
+
+bonus: $(SRCS:.c=.o) $(BONUS_OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $(SRCS:.c=.o) $(BONUS_OBJ) -L Libft -lft -o $(NAME)
+
+$(BONUS_OBJ): $(BONUS_MAIN)
+	$(CC) $(CFLAGS) -c $(BONUS_MAIN) -o $(BONUS_OBJ)
