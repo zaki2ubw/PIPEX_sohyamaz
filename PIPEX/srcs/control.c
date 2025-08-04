@@ -2,7 +2,18 @@
 
 void	error_exit(char *error, t_parent *master)
 {
+	t_node	*current;
+
+	if (master == NULL)
+		exit (1);
+	current = master->in;
 	perror(error);
+	while (current != NULL)
+	{
+		if (current->pipefd != NULL)
+			close_pipefd(current->pipefd);
+		current = current->next;
+	}
 	free_all(master);
 	exit (1);
 }
@@ -59,10 +70,21 @@ void	free_strs(char **str)
 
 void	child_exit(char *error, t_parent *master)
 {
+	t_node	*current;
+
+	if (master == NULL)
+		exit (1);
+	current = master->in;
 	if (error == NULL)
 		perror("NULL");
 	else
 		perror(error);
+	while (current != NULL)
+	{
+		if (current->pipefd != NULL)
+			close_pipefd(current->pipefd);
+		current = current->next;
+	}
 	free_all(master);
 	exit(127);
 }
