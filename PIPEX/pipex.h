@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:38:57 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/08/04 18:39:00 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:41:32 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,12 @@ typedef struct s_parent
 	char			**path;
 	char			**envp;
 	int				cmds;
+	int				lastfd;
+	int				writefd;
+	int				readfd;
 }	t_parent;
 
 //childs.c
-void	swap_safetyfd(t_parent *master, t_node *cmd, int *readfd);
 int		open_file(t_parent *master, t_node *file);
 void	dup_fds(t_parent *master, t_node *cmd, int readfd, int unusefd);
 void	split_cmd(t_parent *master, t_node *cmd);
@@ -69,7 +71,7 @@ void	split_env(char **envp, t_parent *master);
 void	make_procs(t_parent *master);
 pid_t	fork_child(t_parent *master, t_node *cmd, int readfd, int unusefd);
 void	make_pipe(t_parent *master, int *pipefd);
-int		cleanup_fds(int readfd, int *pipefd);
+int		cleanup_fds(int readfd, int *pipefd, t_parent *master, t_node *current);
 void	exec_child(t_parent *master, t_node *cmd, int readfd, int unusefd);
 
 //wait.c

@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:37:38 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/08/04 18:37:40 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:39:26 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	dup_fds(t_parent *master, t_node *cmd, int readfd, int unusefd)
 	if (master == NULL || cmd == NULL)
 		child_exit("NULL", master);
 	check = 0;
-	if (unusefd > 2)
+	if (unusefd > 1)
 		check = close(unusefd);
 	if (check < 0)
 		perror("close");
@@ -113,5 +113,5 @@ void	find_cmd(t_parent *master, t_node *cmd)
 		free(full);
 		i++;
 	}
-	child_exit(cmd->cmd[0], master);
+	child_exit("command not found", master);
 }

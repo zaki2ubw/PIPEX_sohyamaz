@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:38:21 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/08/04 18:38:22 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:08:05 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(int argc, char **argv, char **envp)
 
 	exitcode = 0;
 	master = NULL;
+	check_argc(argc);
 	init_parent(argc, &master);
 	make_list(master);
 	place_args(argc, argv, master);
@@ -27,4 +28,15 @@ int	main(int argc, char **argv, char **envp)
 	exitcode = wait_childs(master);
 	free_all(master);
 	return (exitcode);
+}
+
+void	check_argc(int argc)
+{
+	if (argc < 5)
+	{
+		ft_putstr_fd \
+	("usage:./pipex infile \"cmd1 -op\" \"cmd2 -op\" outfile\n", 2);
+		error_exit("argc", NULL);
+	}
+	return ;
 }

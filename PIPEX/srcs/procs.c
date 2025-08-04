@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:38:27 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/08/04 18:38:28 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:41:58 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,14 @@ void	make_procs(t_parent *master)
 		else
 		{
 			make_pipe(master, pipefd);
+			current->pipefd = pipefd;
 			current->writefd = pipefd[1];
 			current->pid = fork_child(master, current, readfd, pipefd[0]);
-			current->pipefd = pipefd;
-			readfd = cleanup_fds(readfd, pipefd);
+			readfd = cleanup_fds(readfd, pipefd, master, current);
 		}
 		current = current->next;
 	}
-	if (readfd > 1)
-		close(readfd);
+	master->lastfd = readfd;
 	return ;
 }
 
@@ -55,40 +54,40 @@ pid_t	fork_child(t_parent *master, t_node *cmd, int readfd, int unusefd)
 
 int	open_file(t_parent *master, t_node *file)
 {
-	int		check;
+	int	fd;
 
+	fd = 0;
 	if (master == NULL || file == NULL)
 		child_exit("NULL", master);
 	if (file == master->in)
-		check = open(file->value, O_RDONLY);
+	{
+		master->readfd = open(file->value, O_RDONLY);
+		if (master->readfd < 0)
+			child_exit("open", master);
+		fd = master->readfd;
+	}
 	else
-		check = open(file->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (check < 0 && file == master->in)
-		child_exit("open", master);
-	else if (check < 0 && file == master->out)
-		outfile_exit("open", master);
-	return (check);
+	{
+		master->writefd = open(file->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (master->writefd < 0)
+			outfile_exit("open", master);
+		fd = master->writefd;
+	}
+	return (fd);
 }
 
-int	cleanup_fds(int readfd, int *pipefd)
+int	cleanup_fds(int readfd, int *pipefd, t_parent *master, t_node *current)
 {
-	int		check;
-
-	if (pipefd == NULL)
-		return (-1);
-	check = 0;
-	if (readfd > 0)
-	{
-		check = close(readfd);
-		if (check < 0)
-			perror("close");
-	}
-	if (pipefd[1] > 0)
-	{
-		check = close(pipefd[1]);
-		if (check < 0)
-			perror("close");
-	}
+	if (master == NULL || current == NULL || pipefd == NULL)
+		error_exit("NULL", master);
+	if (readfd > 1)
+		close(readfd);
+	if (pipefd[1] > 1)
+		close(pipefd[1]);
+	if (current->prev == master->in && pipefd[1] > 1)
+		close(pipefd[1]);
+	if (current->next == master->out && pipefd[0] > 1)
+		close(pipefd[0]);
 	return (pipefd[0]);
 }
 

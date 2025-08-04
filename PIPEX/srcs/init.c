@@ -6,22 +6,11 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:37:58 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/08/04 18:38:01 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/08/04 21:07:34 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	check_argc(int argc)
-{
-	if (argc != 5)
-	{
-		ft_putstr_fd \
-("usage:./pipex infile \"cmd1 -op\" \"cmd2 -op\" outfile\n", 2);
-		error_exit("argc", NULL);
-	}
-	return ;
-}
 
 void	init_parent(int argc, t_parent **master)
 {

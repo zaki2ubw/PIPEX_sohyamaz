@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 18:37:47 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/08/04 18:37:53 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/08/04 20:27:02 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void	error_exit(char *error, t_parent *master)
 			close_pipefd(current->pipefd);
 		current = current->next;
 	}
+	if (master->readfd > 1)
+		close (master->readfd);
+	if (master->writefd > 1)
+		close (master->writefd);
 	free_all(master);
 	exit (1);
 }
@@ -41,8 +45,10 @@ void	free_all(t_parent *master)
 	while (current != NULL)
 	{
 		next = current->next;
-		if (current->pipefd != NULL)
+		if (current->pid == 0 && current->pipefd != NULL)
 			close_pipefd(current->pipefd);
+		if (current->pid == 0 && current->writefd > 0)
+			close(current->writefd);
 		if (current->fullpath != NULL && current->fullpath != current->cmd[0])
 			free(current->fullpath);
 		free_strs(current->cmd);
@@ -97,6 +103,10 @@ void	child_exit(char *error, t_parent *master)
 			close_pipefd(current->pipefd);
 		current = current->next;
 	}
+	if (master->readfd > 1)
+		close (master->readfd);
+	if (master->writefd > 1)
+		close (master->writefd);
 	free_all(master);
 	exit(127);
 }
